@@ -1,4 +1,12 @@
-public class DeleteAppointmentCommand
+namespace QueueManagementAPI.Application.Commands
 {
-    public string Id { get; set; }
+    public class DeleteAppointmentCommand
+    {
+        public string Id { get; set; }
+
+        public DeleteAppointmentCommand(string id)
+        {
+            Id = id;
+        }
+    }
 }

@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using QueueManagementAPI.Application.Commands;
+using QueueManagementAPI.Application.Handlers;
+using QueueManagementAPI.Application.Queries;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -30,21 +33,25 @@ public class QueueController : ControllerBase
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateAppointment(string id, [FromBody] UpdateAppointmentCommand command)
     {
-        await _updateHandler.Handle(id, command);
+        var success = await _updateHandler.Handle(id, command);
+        if (!success) return NotFound();
         return Ok("Appointment Updated Successfully");
     }
 
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteAppointment(string id)
     {
-        await _deleteHandler.Handle(id);
+        var command = new DeleteAppointmentCommand(id);
+        var success = await _deleteHandler.Handle(command);
+        if (!success) return NotFound("Appointment Not Found");
         return Ok("Appointment Deleted Successfully");
     }
 
     [HttpGet("list")]
     public async Task<IActionResult> GetAppointments()
     {
-        var appointments = await _getHandler.Handle(new GetAppointmentsQuery());
+        var query = new GetAppointmentsQuery();
+        var appointments = await _getHandler.Handle(query);
         return Ok(appointments);
     }
 }

@@ -1,17 +1,23 @@
 using MongoDB.Driver;
+using QueueManagementAPI.Application.Commands;
 using QueueManagementAPI.Domain;
+using System.Threading.Tasks;
 
-public class DeleteAppointmentHandler
+namespace QueueManagementAPI.Application.Handlers
 {
-    private readonly IMongoCollection<QueueAppointment> _appointments;
-
-    public DeleteAppointmentHandler(IMongoDatabase database)
+    public class DeleteAppointmentHandler
     {
-        _appointments = database.GetCollection<QueueAppointment>("Appointments");
-    }
+        private readonly IMongoCollection<QueueAppointment> _appointments;
 
-    public async Task Handle(string id)
-    {
-        await _appointments.DeleteOneAsync(a => a.Id == id);
+        public DeleteAppointmentHandler(IMongoDatabase database)
+        {
+            _appointments = database.GetCollection<QueueAppointment>("Appointments");
+        }
+
+        public async Task<bool> Handle(DeleteAppointmentCommand command)
+        {
+            var result = await _appointments.DeleteOneAsync(a => a.Id == command.Id);
+            return result.DeletedCount > 0;
+        }
     }
 }
