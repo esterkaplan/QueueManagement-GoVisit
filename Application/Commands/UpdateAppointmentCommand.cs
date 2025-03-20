@@ -1,6 +1,6 @@
-public class CreateAppointmentCommand
+public class UpdateAppointmentCommand
 {
     public string? CustomerName { get; set; }
-    public DateTime AppointmentDate { get; set; }
+    public DateTime Date { get; set; }
     public string? ServiceType { get; set; }
 }

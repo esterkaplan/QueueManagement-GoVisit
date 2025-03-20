@@ -1,6 +1,5 @@
 using MongoDB.Driver;
 using QueueManagementAPI.Domain;
-//using QueueManagementAPI.Infrastructure.Database;
 
 public class GetAppointmentsHandler
 {
